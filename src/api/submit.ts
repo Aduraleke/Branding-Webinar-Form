@@ -30,26 +30,27 @@ export default async function handler(
     });
 
     const text = await response.text();
+    console.log("🔥 Google Script Raw Response:", text);
 
+    let data: any = {};
     try {
-      const data = JSON.parse(text);
-      if (response.ok && data.result === "success") {
-        return res.status(200).json({ message: data.message });
-      } else {
-        return res
-          .status(400)
-          .json({ message: data.message || "Submission failed" });
-      }
+      data = JSON.parse(text);
     } catch (jsonErr) {
-      console.error("❌ JSON parse failed:", text);
+      console.error("❌ JSON parse error:", jsonErr);
       return res
         .status(500)
-        .json({ message: "Google Script did not return valid JSON." });
+        .json({ message: "Invalid JSON returned from Google Script." });
     }
+
+    if (!response.ok || data.result !== "success") {
+      return res
+        .status(400)
+        .json({ message: data.message || "Submission failed" });
+    }
+
+    return res.status(200).json({ message: data.message });
   } catch (err: any) {
-    console.error("❌ Fetch error:", err);
-    return res
-      .status(500)
-      .json({ message: "Server error while submitting to Google Script." });
+    console.error("❌ Server error:", err);
+    return res.status(500).json({ message: "Server error while submitting." });
   }
 }
