@@ -3,8 +3,11 @@
 import { useState } from "react";
 import { submitToGoogle } from "@/lib/submitToGoogle";
 import { toast } from "sonner";
+import { Icon } from "@iconify/react";
+import { motion } from "framer-motion";
+import SuccessModal from "./SuccessModal";
 
-export default function WebinarForm() {
+export default function BrandingWebinarForm() {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -15,6 +18,8 @@ export default function WebinarForm() {
   });
 
   const [loading, setLoading] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -47,144 +52,189 @@ export default function WebinarForm() {
     }
   };
 
-  const inputStyle =
-    "peer h-12 w-full border-b-2 border-gray-300 text-gray-800 placeholder-transparent focus:outline-none focus:border-indigo-600 transition";
-
   return (
-    <div className="bg-gradient-to-br from-[#E6F0FF] to-[#F5F9FF] min-h-screen py-20 px-4">
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-xl mx-auto bg-white/90 backdrop-blur-md p-8 rounded-3xl shadow-2xl space-y-6"
+    <div className="relative min-h-screen w-full bg-gradient-to-br from-[#fff1f5] via-[#f0f4ff] to-[#f9fcff] flex items-center justify-center px-4 py-10 md:py-20 overflow-hidden">
+      {/* Glowing blurred background blobs */}
+      <div className="absolute top-[-80px] left-[-80px] w-72 h-72 bg-pink-300 opacity-30 rounded-full filter blur-3xl z-0 animate-pulse" />
+      <div className="absolute bottom-[-100px] right-[-80px] w-96 h-96 bg-indigo-300 opacity-20 rounded-full filter blur-3xl z-0 animate-ping" />
+
+      {/* Animated Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="relative z-10 w-full max-w-5xl bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl px-6 py-10 sm:px-8 md:px-12 lg:px-16 lg:py-14 transition-all duration-500"
       >
-        <h2 className="text-3xl font-bold text-center text-indigo-600">
-          Join Our Free Webinar 🎓
-        </h2>
-        <p className="text-gray-600 text-center text-sm">
-          Let’s learn more about your journey and brand!
-        </p>
-
-        {/* Full Name */}
-        <div className="relative">
-          <input
-            name="fullName"
-            value={formData.fullName}
-            onChange={handleChange}
-            placeholder="Your Full Name"
-            className={inputStyle}
-            required
-          />
-          <label className="absolute left-0 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-indigo-600">
-            Full Name
-          </label>
+        {/* Badge */}
+        <div className="inline-block mb-4 px-3 py-1 text-xs font-semibold text-white bg-gradient-to-r from-pink-500 to-purple-500 rounded-full shadow-md animate-bounce w-fit">
+          🔥 Limited Free Seats Available
         </div>
 
-        {/* Email */}
-        <div className="relative">
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Email Address"
-            className={inputStyle}
-            required
-          />
-          <label className="absolute left-0 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-indigo-600">
-            Email Address
-          </label>
+        {/* Header */}
+        <div className="text-center mb-10 space-y-2">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#1f1f2f] leading-tight tracking-tight">
+            The Branding Prep Class
+          </h1>
+          <p className="text-lg sm:text-xl text-pink-600 font-semibold">
+            Logo, Colours & Clarity
+          </p>
+          <p className="text-sm md:text-base text-gray-600 max-w-xl mx-auto">
+            Take the first step in building your brand with clarity, confidence,
+            and creative direction. Learn how to pick colors, get a logo that
+            speaks, and define your presence.
+          </p>
         </div>
 
-        {/* Phone */}
-        <div className="relative">
-          <input
-            type="tel"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder="Phone Number"
-            className={inputStyle}
-            required
-          />
-          <label className="absolute left-0 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-indigo-600">
-            Phone Number
-          </label>
-        </div>
-
-        {/* Brand */}
-        <div className="relative">
-          <input
-            name="brand"
-            value={formData.brand}
-            onChange={handleChange}
-            placeholder="Your Brand Name"
-            className={inputStyle}
-            required
-          />
-          <label className="absolute left-0 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-indigo-600">
-            Brand Name
-          </label>
-        </div>
-
-        {/* Has Logo */}
-        <div className="space-y-2">
-          <label className="text-sm text-gray-600">Do you have a logo?</label>
-          <div className="flex space-x-4">
-            <label className="flex items-center space-x-2">
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 gap-6">
+            {/* Full Name */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm text-gray-700 font-medium">
+                Full Name
+              </label>
               <input
-                type="radio"
-                name="hasLogo"
-                value="Yes"
-                checked={formData.hasLogo === "Yes"}
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                placeholder="Jane Doe"
+                required
+                className="px-4 py-3 rounded-xl bg-[#f9f9fb] border border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-500 text-gray-800 transition-all"
+              />
+            </div>
+
+            {/* Email */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm text-gray-700 font-medium">
+                Email Address
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="jane@example.com"
+                required
+                className="px-4 py-3 rounded-xl bg-[#f9f9fb] border border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-500 text-gray-800 transition-all"
+              />
+            </div>
+
+            {/* Phone */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm text-gray-700 font-medium">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder="+234..."
+                required
+                className="px-4 py-3 rounded-xl bg-[#f9f9fb] border border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-500 text-gray-800 transition-all"
+              />
+            </div>
+
+            {/* Brand Name */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm text-gray-700 font-medium">
+                Brand Name
+              </label>
+              <input
+                name="brand"
+                value={formData.brand}
+                onChange={handleChange}
+                placeholder="Styled by Chioma"
+                required
+                className="px-4 py-3 rounded-xl bg-[#f9f9fb] border border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-500 text-gray-800 transition-all"
+              />
+            </div>
+
+            {/* Has Logo */}
+            <div className="flex flex-col gap-2">
+              <label className="text-sm text-gray-700 font-medium">
+                Do you have a logo?
+              </label>
+              <div className="flex gap-6">
+                {["Yes", "No"].map((option) => (
+                  <label
+                    key={option}
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <input
+                      type="radio"
+                      name="hasLogo"
+                      value={option}
+                      checked={formData.hasLogo === option}
+                      onChange={handleChange}
+                      className="accent-pink-600"
+                      required
+                    />
+                    <span className="text-gray-700">{option}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Journey Stage */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm text-gray-700 font-medium">
+                Your brand journey stage
+              </label>
+              <select
+                name="journeyStage"
+                value={formData.journeyStage}
                 onChange={handleChange}
                 required
-              />
-              <span className="text-gray-700">Yes</span>
-            </label>
-            <label className="flex items-center space-x-2">
-              <input
-                type="radio"
-                name="hasLogo"
-                value="No"
-                checked={formData.hasLogo === "No"}
-                onChange={handleChange}
-              />
-              <span className="text-gray-700">No</span>
-            </label>
+                className="px-4 py-3 rounded-xl bg-[#f9f9fb] border border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-500 text-gray-800 transition-all"
+              >
+                <option value="" disabled>
+                  Select your stage
+                </option>
+                <option value="Just Starting Out">Just Starting Out</option>
+                <option value="Growing Slowly">Growing Slowly</option>
+                <option value="Ready to Scale">Ready to Scale</option>
+                <option value="I Don’t Even Know!">I Don’t Even Know!</option>
+              </select>
+            </div>
+          </div>
+
+          {/* CTA Button */}
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.98 }}
+            type="submit"
+            disabled={loading}
+            className="w-full py-3 rounded-xl bg-gradient-to-r from-pink-500 to-indigo-500 text-white font-semibold text-lg flex justify-center items-center gap-2 shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-60"
+          >
+            <Icon icon="mdi:rocket-launch-outline" className="text-xl" />
+            {loading ? "Submitting..." : "Register for Free Class"}
+          </motion.button>
+        </form>
+
+        {/* Bonus Section */}
+        <div className="mt-10 bg-[#fdf4ff] rounded-xl p-4 sm:p-6 text-sm sm:text-base text-gray-700 space-y-3">
+          <p className="font-semibold text-pink-600">✨ What you’ll get:</p>
+          <ul className="list-disc list-inside space-y-1">
+            <li>Free starter logo templates</li>
+            <li>Personalised brand feedback</li>
+            <li>Exclusive access to creative design resources</li>
+          </ul>
+          <div className="pt-4 border-t border-gray-200 space-y-3 text-xs text-gray-500">
+            📅 <strong>Date:</strong> August 17th · 🕔 <strong>Time:</strong>{" "}
+            5PM WAT ·<br /> 🖥️ Live on Google Meet
+            <br />
+            🎙️ <strong>Speakers:</strong> TechLeke & Sylvernus tochukwu
           </div>
         </div>
 
-        {/* Journey Stage */}
-        <div className="space-y-2">
-          <label htmlFor="journeyStage" className="text-sm text-gray-600">
-            What stage are you in your brand journey?
-          </label>
-          <select
-            id="journeyStage"
-            name="journeyStage"
-            value={formData.journeyStage}
-            onChange={handleChange}
-            required
-            className="w-full h-12 border-b-2 border-gray-300 focus:outline-none focus:border-indigo-600 bg-transparent text-gray-800 transition"
-          >
-            <option value="" disabled>
-              Select your stage
-            </option>
-            <option value="Just Starting Out">Just Starting Out</option>
-            <option value="Growing Slowly">Growing Slowly</option>
-            <option value="Ready to Scale">Ready to Scale</option>
-            <option value="I Don’t Even Know!">I Don’t Even Know!</option>
-          </select>
-        </div>
-
-        {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-full text-lg font-semibold tracking-wide transition duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
-        >
-          {loading ? "Submitting..." : "Register Now"}
-        </button>
-      </form>
+        {showModal && (
+          <SuccessModal
+            onClose={() => setShowModal(false)}
+            dmLink="https://wa.me/234XXXXXXXXXX?text=Hi%20I%20just%20registered%20for%20the%20Branding%20Prep%20Class!"
+          />
+        )}
+      </motion.div>
     </div>
   );
 }
