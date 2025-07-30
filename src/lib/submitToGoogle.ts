@@ -11,26 +11,18 @@ export const submitToGoogle = async (formData: {
     email: formData.email,
     phone: formData.phone,
     hasLogo: formData.hasLogo,
-    goal: formData.brand, // maps to 'goal' in Google Script
+    goal: formData.brand,
     journeyStage: formData.journeyStage,
   };
 
-  try {
-    const res = await fetch("/api/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+  const res = await fetch("/api/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
 
-    const result = await res.json();
+  const result = await res.json(); // Safe now because server handled it
+  if (!res.ok) throw new Error(result.message || "Submission failed");
 
-    if (!res.ok) {
-      throw new Error(result.message || "Submission failed");
-    }
-
-    return result.message;
-  } catch (error: any) {
-    console.error("Submission error:", error);
-    throw new Error(error.message || "Network error");
-  }
+  return result.message;
 };

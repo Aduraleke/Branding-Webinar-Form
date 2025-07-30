@@ -29,17 +29,27 @@ export default async function handler(
       }),
     });
 
-    const data = await response.json();
+    const text = await response.text();
 
-    if (!response.ok || data.result !== "success") {
+    try {
+      const data = JSON.parse(text);
+      if (response.ok && data.result === "success") {
+        return res.status(200).json({ message: data.message });
+      } else {
+        return res
+          .status(400)
+          .json({ message: data.message || "Submission failed" });
+      }
+    } catch (jsonErr) {
+      console.error("❌ JSON parse failed:", text);
       return res
-        .status(400)
-        .json({ message: data.message || "Submission failed" });
+        .status(500)
+        .json({ message: "Google Script did not return valid JSON." });
     }
-
-    return res.status(200).json({ message: data.message });
   } catch (err: any) {
-    console.error("Server error:", err);
-    return res.status(500).json({ message: "Something went wrong!" });
+    console.error("❌ Fetch error:", err);
+    return res
+      .status(500)
+      .json({ message: "Server error while submitting to Google Script." });
   }
 }
