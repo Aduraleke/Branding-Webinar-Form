@@ -51,6 +51,6 @@ export default async function handler(
     return res.status(200).json({ message: data.message });
   } catch (err: any) {
     console.error("❌ Server error:", err);
-    return res.status(500).json({ message: "Server error while submitting." });
+    return res.status(500).json({ message: "Server encountered error while submitting." });
   }
 }
