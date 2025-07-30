@@ -32,12 +32,6 @@ export default function SuccessModal({ onClose, dmLink }: SuccessModalProps) {
         >
           📩 Message Me Now
         </a>
-        <button
-          onClick={onClose}
-          className="mt-4 text-gray-500 hover:underline text-sm block w-full"
-        >
-          Not now
-        </button>
       </motion.div>
     </div>
   );
