@@ -236,7 +236,7 @@ export default function BrandingWebinarForm() {
               5PM WAT ·<br />
               🖥️ Live on Google Meet
               <br />
-              🎙️ <strong>Speakers:</strong> TechLeke & Sylvernus Tochukwu
+              🎙️ <strong>Speakers:</strong> TechLeke & Tee C concepts
             </div>
           </div>
 
