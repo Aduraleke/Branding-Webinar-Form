@@ -4,10 +4,15 @@ import { motion } from "framer-motion";
 
 interface SuccessModalProps {
   onClose: () => void;
-  dmLink: string;
+  fullName: string;
 }
 
-export default function SuccessModal({ onClose, dmLink }: SuccessModalProps) {
+export default function SuccessModal({ onClose, fullName }: SuccessModalProps) {
+  const message = `Hi TechLeke, my name is ${fullName}. I have registered and I want you to add me to the waitlist group.`;
+  const dmLink = `https://wa.me/2348127336515?text=${encodeURIComponent(
+    message
+  )}`;
+
   return (
     <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
       <motion.div

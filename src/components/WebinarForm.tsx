@@ -244,7 +244,7 @@ export default function BrandingWebinarForm() {
           {showModal && (
             <SuccessModal
               onClose={() => setShowModal(false)}
-              dmLink="https://wa.me/2348127336515"
+              fullName={formData.fullName}
             />
           )}
         </motion.div>
