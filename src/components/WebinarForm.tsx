@@ -20,6 +20,8 @@ export default function BrandingWebinarForm() {
 
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+const [submittedName, setSubmittedName] = useState("");
+
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -37,16 +39,18 @@ export default function BrandingWebinarForm() {
     try {
       const message = await submitToGoogle(formData);
       toast.success(message || "Thanks for registering! 🎉");
-      setShowModal(true); // ✅ Show success modal
+    setSubmittedName(formData.fullName); // ✅ capture name before wiping
+    setShowModal(true); // ✅ then show modal
 
-      setFormData({
-        fullName: "",
-        email: "",
-        phone: "",
-        brand: "",
-        hasLogo: "",
-        journeyStage: "",
-      });
+    setFormData({
+      fullName: "",
+      email: "",
+      phone: "",
+      brand: "",
+      hasLogo: "",
+      journeyStage: "",
+    });
+
     } catch (err: any) {
       toast.error(err.message || "Something went wrong!");
     } finally {
@@ -244,7 +248,7 @@ export default function BrandingWebinarForm() {
           {showModal && (
             <SuccessModal
               onClose={() => setShowModal(false)}
-              fullName={formData.fullName}
+              fullName={submittedName} // ✅ correct name
             />
           )}
         </motion.div>
